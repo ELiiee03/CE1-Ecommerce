@@ -25,7 +25,7 @@ class EmailService {
         $this->mail->setFrom('no-reply@example.com', 'IT113 E-Commerce');
         $this->mail->addAddress($toEmail);
 
-        $verificationLink = "http://localhost/user-auth/verifyEmail.php?token=" . $tokenId;
+        $verificationLink = "http://localhost/user-auth/CE1-Ecommerce/verifyEmail.php?token=" . $tokenId;
 
         $this->mail->isHTML(true);
         $this->mail->Subject = 'Verify Your Email Address';

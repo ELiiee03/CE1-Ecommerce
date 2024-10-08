@@ -1,39 +1,26 @@
 <?php
-require_once 'src/Database/database.php';
-require_once 'loginUser.php';
-require_once 'registerUser.php'; 
-require_once __DIR__ . '/vendor/autoload.php';
 
-use Dotenv\Dotenv;
+// Enable CORS for testing (optional)
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
-$dotenv = Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+$request_method = $_SERVER['REQUEST_METHOD'];
+$request_uri = $_SERVER['REQUEST_URI'];
 
-// Ensure that the request method is valid
-$requestMethod = $_SERVER['REQUEST_METHOD'];
+// Define base path for the API routes
+$base_path = '/user-auth/CE1-Ecommerce/api.php';
 
-// Capture the full request URI
-$requestUri = $_SERVER['REQUEST_URI'];
-
-$requestUri = explode('?', $requestUri)[0];
-$scriptName = basename($_SERVER['SCRIPT_NAME']); // 'api.php'
-$requestUri = str_replace("/$scriptName", '', $requestUri);
-$requestUriParts = explode('/', trim($requestUri, '/'));
-
-// Get the route - this assumes the route is the first part of the URI
-$route = isset($requestUriParts[0]) ? $requestUriParts[0] : '';
-
-// Define the routes
-if ($route === 'login' && $requestMethod === 'POST') {
-    // Process login
-    require 'loginUser.php';
-} 
-elseif ($route === 'register' && $requestMethod === 'POST') {
-    // Process registration
-    require 'registerUser.php'; // Add the registration route
-} 
-else {
-    // If no route matches, return a 404 response
-    http_response_code(404); // Not Found
-    echo json_encode(['message' => 'Not Found']);
+// Register Route
+if ($request_uri === $base_path . '/register' && $request_method === 'POST') {
+    require 'registerUser.php';
+    exit();
 }
+if ($request_uri === $base_path . '/login' && $request_method === 'POST') {
+    require 'loginUser.php';
+    exit();
+}
+
+// If no route matches, return 404
+http_response_code(404);
+echo json_encode(['message' => 'Endpoint not found']);
