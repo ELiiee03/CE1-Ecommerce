@@ -1,6 +1,7 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
 require 'vendor/autoload.php';
 
 class EmailService {
@@ -38,5 +39,24 @@ class EmailService {
             return false;
         }
     }
+
+    // Method to send password reset request email
+    public function sendPasswordResetRequestEmail($toEmail, $resetToken) {
+        $this->mail->setFrom('no-reply@example.com', 'IT113 E-Commerce');
+        $this->mail->addAddress($toEmail);
+
+        // Generate the reset link with the token
+        $resetLink = "http://localhost/user-auth/CE1-Ecommerce/resetPassword.php?token=" . $resetToken;
+
+        $this->mail->isHTML(true);
+        $this->mail->Subject = 'Password Reset Request';
+        $this->mail->Body    = "Click the link to reset your password: <a href='$resetLink'>$resetLink</a>";
+
+        try {
+            $this->mail->send();
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }
-?>

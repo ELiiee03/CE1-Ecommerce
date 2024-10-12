@@ -1,7 +1,7 @@
 <?php
 require_once 'src/Database/database.php';
 require_once 'src/class/register.php';
-require_once 'src/class/emailservice.php';
+require_once  'src/class/emailservice.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Dotenv\Dotenv;

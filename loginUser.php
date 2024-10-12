@@ -56,8 +56,8 @@ $result = $login->loginUser();
 
 if ($result['success']) {
     $token = $result['token'];
-    $userId = $result['user_id'] ?? null; // User ID
-    $fullName = $result['name'] ?? '';    // Full Name
+    $userId = $result['user_id'] ?? null; 
+    $fullName = $result['name'] ?? '';    
     
     // Return response with JWT token and user info
     http_response_code(200);
