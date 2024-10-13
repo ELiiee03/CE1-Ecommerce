@@ -1,5 +1,5 @@
 <?php
-require_once 'src/Database/database.php';
+require_once 'src/database/database.php';
 require_once 'src/class/login.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -8,7 +8,6 @@ use Rakit\Validation\Validator;
 
 header('Content-Type: application/json');
 
-// Load .env file
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 

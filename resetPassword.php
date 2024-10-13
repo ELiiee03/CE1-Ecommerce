@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/src/Database/database.php';
-require_once __DIR__ . '/src/passwordord/verifyRequest.php';
+require_once __DIR__ . '/src/database/database.php';
+require_once __DIR__ . '/src/password/verifyRequest.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
 header('Content-Type: application/json');

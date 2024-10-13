@@ -1,5 +1,5 @@
 <?php
-require_once 'src/Database/database.php';
+require_once 'src/database/database.php';
 require_once 'src/class/register.php';
 require_once  'src/class/emailservice.php';
 require_once __DIR__ . '/vendor/autoload.php';
@@ -46,7 +46,7 @@ $validation = $validator->make($data, [
     'password'                => 'required|min:8|regex:/[A-Za-z]/|regex:/[0-9]/|regex:/[@$!%*?&]/', 
     'confirm_password'        => 'required|min:8',
     'date_of_birth'           => 'required|date|before:today', // Ensure it’s a valid date and in the past
-    'role'                    => 'required|in:user,admin'
+    'role'                    => 'required|in:customer,admin,vendor'
 ]);
 
 try {

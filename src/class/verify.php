@@ -9,7 +9,7 @@ class EmailVerification {
     }
 
     public function verifyEmail() {
-        // Step 1: Fetch the user_id using the token
+        // Fetch the user_id using the token
         $query = 'SELECT user_id FROM user_tokens WHERE token_id = :token_id AND expired_at > NOW()';
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':token_id', $this->token);
@@ -19,7 +19,7 @@ class EmailVerification {
         if ($result) {
             $userId = $result['user_id'];
 
-            // Step 2: Check if the email is already verified
+            // Check if the email is already verified
             $checkQuery = 'SELECT is_verified FROM users WHERE user_id = :user_id';
             $checkStmt = $this->db->prepare($checkQuery);
             $checkStmt->bindParam(':user_id', $userId);
@@ -30,13 +30,13 @@ class EmailVerification {
                 return ['message' => 'Email is already verified.'];
             }
 
-            // Step 3: Update the is_verified field
+            // Update the is_verified field
             $updateQuery = 'UPDATE users SET is_verified = 1 WHERE user_id = :user_id';
             $updateStmt = $this->db->prepare($updateQuery);
             $updateStmt->bindParam(':user_id', $userId);
             $updateResult = $updateStmt->execute();
 
-            // Debugging: Check if the update query succeeded
+            // Check if the update query succeeded
             if ($updateResult) {
                 return ['message' => 'Email verification successful!'];
             } else {

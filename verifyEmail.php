@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/src/class/verify.php';  
-require_once __DIR__ . '/src/Database/database.php';
+require_once __DIR__ . '/src/database/database.php';
 
 header('Content-Type: application/json');
 

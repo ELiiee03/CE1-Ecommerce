@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/src/Database/database.php';
+require_once __DIR__ . '/src/database/database.php';
 require_once __DIR__ . '/src/password/password_reset.php';
 require_once __DIR__ . '/vendor/autoload.php';
 
