@@ -44,6 +44,11 @@ if ($request_uri === $base_path . '/profile/update' && $request_method === 'POST
     exit();
 }
 
+// Get User Profile
+if ($request_uri === $base_path . '/user/profile' && $request_method === 'GET') {
+    require 'getUserProfile.php';
+    exit();
+}
 
 // If no route matches, return 404S
 http_response_code(404);
