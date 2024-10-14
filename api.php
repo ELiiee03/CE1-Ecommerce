@@ -20,6 +20,13 @@ if ($request_uri === $base_path . '/login' && $request_method === 'POST') {
     require 'loginUser.php';
     exit();
 }
+
+// Logout Route
+if ($request_uri === $base_path . '/logout' && $request_method === 'POST') {
+    require 'logoutUser.php';
+    exit();
+}
+
 // Password Reset Request
 if ($request_uri === $base_path . '/password/reset/request' && $request_method === 'POST') {
     require 'passRequest.php';
@@ -30,6 +37,13 @@ if ($request_uri === $base_path . '/password/reset' && $request_method === 'POST
     require 'passReset.php';
     exit();
 }
+
+// Profile Update
+if ($request_uri === $base_path . '/profile/update' && $request_method === 'POST') {
+    require 'profileUpdate.php';
+    exit();
+}
+
 
 // If no route matches, return 404S
 http_response_code(404);

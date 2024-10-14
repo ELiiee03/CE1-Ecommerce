@@ -38,14 +38,14 @@ foreach ($requiredKeys as $key) {
 // Initialize Rakit Validator
 $validator = new Validator;
 
-// Define validation rules
+// validation rules
 $validation = $validator->make($data, [
     'first_name'              => 'required|alpha|max:50',
     'last_name'               => 'required|alpha|max:50',
     'email'                   => 'required|email|max:100',
     'password'                => 'required|min:8|regex:/[A-Za-z]/|regex:/[0-9]/|regex:/[@$!%*?&]/', 
     'confirm_password'        => 'required|min:8',
-    'date_of_birth'           => 'required|date|before:today', // Ensure it’s a valid date and in the past
+    'date_of_birth'           => 'required|date|before:today', 
     'role'                    => 'required|in:customer,admin,vendor'
 ]);
 
@@ -95,7 +95,7 @@ try {
     if ($result['success']) {
         $tokenId = $result['token_id'];
     
-        // Fetch newly registered user ID (assuming it's in $result['user_id'])
+        // Fetch newly registered user 
         $userId = $result['user_id']; // Assuming 'registerUser' function returns user_id
         $fullName = $data['first_name'] . ' ' . $data['last_name'];
     
