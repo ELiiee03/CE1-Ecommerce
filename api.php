@@ -38,6 +38,12 @@ if ($request_uri === $base_path . '/password/reset' && $request_method === 'POST
     exit();
 }
 
+// Change Password Route
+if ($request_uri === $base_path . '/password/change' && $request_method === 'POST') {
+    require 'changePassword.php';
+    exit();
+}
+
 // Profile Update
 if ($request_uri === $base_path . '/profile/update' && $request_method === 'POST') {
     require 'profileUpdate.php';
@@ -49,6 +55,7 @@ if ($request_uri === $base_path . '/user/profile' && $request_method === 'GET') 
     require 'getUserProfile.php';
     exit();
 }
+
 
 // If no route matches, return 404S
 http_response_code(404);
