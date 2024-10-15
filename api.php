@@ -56,6 +56,12 @@ if ($request_uri === $base_path . '/user/profile' && $request_method === 'GET') 
     exit();
 }
 
+// Assign Role to User
+if ($request_uri === $base_path . '/role/assign' && $request_method === 'POST') {
+    require 'userRole.php';
+    exit();
+}
+
 
 // If no route matches, return 404S
 http_response_code(404);
