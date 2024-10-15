@@ -49,4 +49,35 @@ class User
             return ['status' => 'error', 'message' => 'Failed to assign role'];
         }
     }
+
+    // function to revoke role from a user
+    public function revokeRole($userId)
+    {
+        try {
+            // Check if the user exists
+            $checkQuery = 'SELECT role FROM users WHERE user_id = :user_id';
+            $checkStmt = $this->db->prepare($checkQuery);
+            $checkStmt->bindParam(':user_id', $userId);
+            $checkStmt->execute();
+            $user = $checkStmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$user) {
+                return ['success' => false, 'message' => 'User not found.'];
+            }
+
+            // Revoke role (set to NULL or set a default role)
+            $updateQuery = 'UPDATE users SET role = NULL WHERE user_id = :user_id';
+            $updateStmt = $this->db->prepare($updateQuery);
+            $updateStmt->bindParam(':user_id', $userId);
+            $updateResult = $updateStmt->execute();
+
+            if ($updateResult) {
+                return ['success' => true, 'message' => 'User role revoked successfully.'];
+            } else {
+                return ['success' => false, 'message' => 'Failed to revoke user role.'];
+            }
+        } catch (PDOException $e) {
+            return ['success' => false, 'message' => 'Database error: ' . $e->getMessage()];
+        }
+    }
 }

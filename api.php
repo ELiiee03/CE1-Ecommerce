@@ -62,6 +62,11 @@ if ($request_uri === $base_path . '/role/assign' && $request_method === 'POST') 
     exit();
 }
 
+// Revoke role from user
+if ($request_uri === $base_path . '/role/revoke' && $request_method === 'POST') {
+    require 'revokeUser.php';
+    exit();
+}
 
 // If no route matches, return 404S
 http_response_code(404);
