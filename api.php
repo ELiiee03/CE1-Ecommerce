@@ -27,12 +27,12 @@ if ($request_uri === $base_path . '/logout' && $request_method === 'POST') {
     exit();
 }
 
-// Password Reset Request
+// Password Reset Request Route
 if ($request_uri === $base_path . '/password/reset/request' && $request_method === 'POST') {
     require 'passRequest.php';
     exit();
 }
-// Password Reset
+// Password Reset Route
 if ($request_uri === $base_path . '/password/reset' && $request_method === 'POST') {
     require 'passReset.php';
     exit();
@@ -44,27 +44,33 @@ if ($request_uri === $base_path . '/password/change' && $request_method === 'POS
     exit();
 }
 
-// Profile Update
+// Profile Update Route
 if ($request_uri === $base_path . '/profile/update' && $request_method === 'POST') {
     require 'profileUpdate.php';
     exit();
 }
 
-// Get User Profile
+// Get User Profile Route
 if ($request_uri === $base_path . '/user/profile' && $request_method === 'GET') {
     require 'getUserProfile.php';
     exit();
 }
 
-// Assign Role to User
+// Assign Role to User Route
 if ($request_uri === $base_path . '/role/assign' && $request_method === 'POST') {
     require 'userRole.php';
     exit();
 }
 
-// Revoke role from user
+// Revoke Role from User Route
 if ($request_uri === $base_path . '/role/revoke' && $request_method === 'POST') {
     require 'revokeUser.php';
+    exit();
+}
+
+// Profile Photo Upload Route
+if ($request_uri === $base_path . '/profile/photo/upload' && $request_method === 'POST') {
+    require 'uploadProfilePicture.php';
     exit();
 }
 

@@ -50,7 +50,7 @@ class User
         }
     }
 
-    // function to revoke role from a user
+    // Function to revoke role from a user
     public function revokeRole($userId)
     {
         try {
@@ -80,4 +80,49 @@ class User
             return ['success' => false, 'message' => 'Database error: ' . $e->getMessage()];
         }
     }
+
+    // Function to upload profile picture
+    public function uploadProfilePicture($userId, $file) {
+        if (!isset($file) || $file['error'] !== UPLOAD_ERR_OK) {
+            return ['status' => 'error', 'message' => 'File upload error'];
+        }
+
+        // Validate file type
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        $fileType = mime_content_type($file['tmp_name']);
+        if (!in_array($fileType, $allowedTypes)) {
+            return ['status' => 'error', 'message' => 'Invalid file type. Allowed types: jpeg, png, gif'];
+        }
+
+        // Set the upload directory and generate a unique filename
+        $uploadDir = __DIR__ . '/uploads/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $fileName = uniqid() . '_' . basename($file['name']);
+        $uploadPath = $uploadDir . $fileName;
+
+        // Move the uploaded file to the destination directory
+        if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
+            // Store the URL or file path in the database
+            $imageUrl = '/uploads/' . $fileName;
+
+            // Ensure the user exists
+            $stmt = $this->db->prepare('SELECT * FROM users WHERE user_id = :user_id');
+            $stmt->execute(['user_id' => $userId]);
+            if ($stmt->rowCount() === 0) {
+                return ['status' => 'error', 'message' => 'User not found'];
+            }
+
+            // Update the user's profile image URL
+            $stmt = $this->db->prepare('UPDATE users SET profile_image_url = :profile_image_url WHERE user_id = :user_id');
+            $stmt->execute(['profile_image_url' => $imageUrl, 'user_id' => $userId]);
+
+            return ['status' => 'success', 'message' => 'Profile picture uploaded successfully', 'image_url' => $imageUrl];
+        } else {
+            return ['status' => 'error', 'message' => 'Failed to move uploaded file'];
+        }
+    }
 }
+?>
