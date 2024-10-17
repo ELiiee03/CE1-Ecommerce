@@ -46,7 +46,7 @@ class EmailService {
         $this->mail->addAddress($toEmail);
 
         // Generate the reset link with the token
-        $resetLink = "http://localhost/user-auth/CE1-Ecommerce/verification/resetPassword.php?token=" . $resetToken;
+        $resetLink = "http://localhost/user-auth/CE1-Ecommerce/verification/verifyPasswordRequest.php?token=" . $resetToken;
 
         $this->mail->isHTML(true);
         $this->mail->Subject = 'Password Reset Request';
