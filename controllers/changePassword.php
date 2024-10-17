@@ -1,7 +1,9 @@
 <?php
-require_once __DIR__ . '/src/database/database.php';
-require_once __DIR__ . '/src/password/change_password.php';
-require_once __DIR__ . '/vendor/autoload.php';
+
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../src/database/database.php';
+require_once __DIR__ . '/../src/password/change_password.php';
+
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -9,8 +11,7 @@ use Dotenv\Dotenv;
 
 header("Content-Type: application/json");
 
-// Load environment variables
-$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../'); 
 $dotenv->load();
 
 $jwt_secret_key = $_ENV['JWT_SECRET'];

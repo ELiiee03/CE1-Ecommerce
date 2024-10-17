@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/src/database/database.php';
-require_once __DIR__ . '/src/class/logout.php';
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../src/database/database.php';
+require_once __DIR__ . '/../src/class/logout.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -9,8 +9,7 @@ use Dotenv\Dotenv;
 
 header('Content-Type: application/json');
 
-// Load .env file
-$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../'); 
 $dotenv->load();
 
 try {

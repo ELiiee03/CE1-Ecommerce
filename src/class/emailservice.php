@@ -26,7 +26,7 @@ class EmailService {
         $this->mail->setFrom('no-reply@example.com', 'IT113 E-Commerce');
         $this->mail->addAddress($toEmail);
 
-        $verificationLink = "http://localhost/user-auth/CE1-Ecommerce/verifyEmail.php?token=" . $tokenId;
+        $verificationLink = "http://localhost/user-auth/CE1-Ecommerce/verification/verifyEmail.php?token=" . $tokenId;
 
         $this->mail->isHTML(true);
         $this->mail->Subject = 'Verify Your Email Address';
@@ -46,7 +46,7 @@ class EmailService {
         $this->mail->addAddress($toEmail);
 
         // Generate the reset link with the token
-        $resetLink = "http://localhost/user-auth/CE1-Ecommerce/resetPassword.php?token=" . $resetToken;
+        $resetLink = "http://localhost/user-auth/CE1-Ecommerce/verification/resetPassword.php?token=" . $resetToken;
 
         $this->mail->isHTML(true);
         $this->mail->Subject = 'Password Reset Request';

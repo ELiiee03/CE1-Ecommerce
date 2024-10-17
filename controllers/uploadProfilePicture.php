@@ -1,6 +1,7 @@
 <?php
-require_once __DIR__ . '/src/database/database.php';
-require_once __DIR__ . '/src/class/user.php';
+
+require_once __DIR__ . '/../src/database/database.php';
+require_once __DIR__ . '/../src/class/user.php';
 
 header('Content-Type: application/json');
 

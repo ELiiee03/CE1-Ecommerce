@@ -124,5 +124,7 @@ class User
             return ['status' => 'error', 'message' => 'Failed to move uploaded file'];
         }
     }
+
+    
 }
 ?>

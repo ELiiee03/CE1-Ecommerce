@@ -12,67 +12,75 @@ $base_path = '/user-auth/CE1-Ecommerce/api.php';
 
 // Register Route
 if ($request_uri === $base_path . '/register' && $request_method === 'POST') {
-    require 'registerUser.php';
+    require __DIR__ . '/controllers/registerUser.php'; 
     exit();
 }
+
 // Login Route
 if ($request_uri === $base_path . '/login' && $request_method === 'POST') {
-    require 'loginUser.php';
+    require __DIR__ . '/controllers/loginUser.php'; 
     exit();
 }
 
 // Logout Route
 if ($request_uri === $base_path . '/logout' && $request_method === 'POST') {
-    require 'logoutUser.php';
+    require __DIR__ . '/controllers/logoutUser.php';
     exit();
 }
 
 // Password Reset Request Route
 if ($request_uri === $base_path . '/password/reset/request' && $request_method === 'POST') {
-    require 'passRequest.php';
+    require __DIR__ . '/controllers/passRequest.php';
     exit();
 }
 // Password Reset Route
 if ($request_uri === $base_path . '/password/reset' && $request_method === 'POST') {
-    require 'passReset.php';
+    require __DIR__ . '/controllers/passReset.php';
     exit();
 }
 
 // Change Password Route
 if ($request_uri === $base_path . '/password/change' && $request_method === 'POST') {
-    require 'changePassword.php';
+    require __DIR__ . '/controllers/changePassword.php';
     exit();
 }
 
 // Profile Update Route
 if ($request_uri === $base_path . '/profile/update' && $request_method === 'POST') {
-    require 'profileUpdate.php';
+    require __DIR__ . '/controllers/profileUpdate.php';
     exit();
 }
 
 // Get User Profile Route
 if ($request_uri === $base_path . '/user/profile' && $request_method === 'GET') {
-    require 'getUserProfile.php';
+    require __DIR__ . '/controllers/getUserProfile.php';
     exit();
 }
 
 // Assign Role to User Route
 if ($request_uri === $base_path . '/role/assign' && $request_method === 'POST') {
-    require 'userRole.php';
+    require __DIR__ . '/controllers/userRole.php';
     exit();
 }
 
 // Revoke Role from User Route
 if ($request_uri === $base_path . '/role/revoke' && $request_method === 'POST') {
-    require 'revokeUser.php';
+    require __DIR__ . '/controllers/revokeUser.php';
     exit();
 }
 
 // Profile Photo Upload Route
 if ($request_uri === $base_path . '/profile/photo/upload' && $request_method === 'POST') {
-    require 'uploadProfilePicture.php';
+    require __DIR__ . '/controllers/uploadProfilePicture.php';
     exit();
 }
+
+// Add Address
+if ($request_uri === $base_path . '/add/address' && $request_method === 'POST') {
+    require __DIR__ . '/controllers/addAddress.php'; 
+    exit();
+}
+
 
 // If no route matches, return 404S
 http_response_code(404);
