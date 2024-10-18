@@ -29,26 +29,46 @@ class User
     }
 
     // Function to assign a role to a user
-    public function assignRole($user_id, $role)
-    {
-        // Check if the role is valid
-        $valid_roles = ['admin', 'customer', 'vendor']; // Valid roles
+    public function assignRole($user_id, $role){
+
+    // Check if the role is valid
+    $valid_roles = ['admin', 'customer', 'vendor']; // Valid roles
         if (!in_array($role, $valid_roles)) {
-            return ['status' => 'error', 'message' => 'Invalid role specified'];
+        return ['status' => 'error', 'message' => 'Invalid role specified'];
         }
 
-        // Update the role in the database
-        $query = "UPDATE users SET role = :role WHERE user_id = :user_id";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':role', $role, PDO::PARAM_STR);
-        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_STR);
+            // Get the current roles from the database
+            $query = "SELECT role FROM users WHERE user_id = :user_id";
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_STR);
+            $stmt->execute();
+            
+            // Fetch the current roles
+            $current_roles = $stmt->fetchColumn();
+            $roles_array = explode(',', $current_roles);
+        
+            // Check if the role is already assigned
+            if (in_array($role, $roles_array)) {
+                return ['status' => 'error', 'message' => 'Role already assigned to the user'];
+            }
 
-        if ($stmt->execute()) {
-            return ['status' => 'success', 'message' => 'Role assigned successfully'];
-        } else {
-            return ['status' => 'error', 'message' => 'Failed to assign role'];
-        }
-    }
+            // Add the new role
+            $roles_array[] = $role;
+            $new_roles = implode(',', $roles_array);
+
+            // Update the roles in the database
+            $update_query = "UPDATE users SET role = :role WHERE user_id = :user_id";
+            $update_stmt = $this->db->prepare($update_query);
+            $update_stmt->bindParam(':role', $new_roles, PDO::PARAM_STR);
+            $update_stmt->bindParam(':user_id', $user_id, PDO::PARAM_STR);
+
+            if ($update_stmt->execute()) {
+                return ['status' => 'success', 'message' => 'Role assigned successfully'];
+            } else {
+                return ['status' => 'error', 'message' => 'Failed to assign role'];
+            }
+}
+
 
     // Function to revoke role from a user
     public function revokeRole($userId)

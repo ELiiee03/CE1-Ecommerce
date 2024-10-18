@@ -10,6 +10,7 @@ $request_uri = $_SERVER['REQUEST_URI'];
 // Base path for the API routes
 $base_path = '/user-auth/CE1-Ecommerce/api.php';
 
+
 // Register Route
 if ($request_uri === $base_path . '/register' && $request_method === 'POST') {
     require __DIR__ . '/controllers/registerUser.php'; 
@@ -92,6 +93,14 @@ if ($request_uri === $base_path . '/delete/address' && $request_method === 'DELE
     require __DIR__ . '/controllers/deleteAddress.php'; 
     exit();
 }
+
+// List User Roles
+if (preg_match("#^" . $base_path . "/roles/([a-zA-Z0-9]+)$#", $request_uri, $matches) && $request_method === 'GET') {
+    $user_id = $matches[1]; // Extract the user ID from the URL
+    require __DIR__ . '/controllers/getUserRoles.php'; 
+    exit();
+}
+
 
 
 // If no route matches, return 404S
