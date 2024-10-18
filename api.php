@@ -81,6 +81,18 @@ if ($request_uri === $base_path . '/add/address' && $request_method === 'POST') 
     exit();
 }
 
+// Update Address
+if ($request_uri === $base_path . '/update/address' && $request_method === 'POST') {
+    require __DIR__ . '/controllers/updateAddress.php'; 
+    exit();
+}
+
+// Delete Address
+if ($request_uri === $base_path . '/delete/address' && $request_method === 'DELETE') {
+    require __DIR__ . '/controllers/deleteAddress.php'; 
+    exit();
+}
+
 
 // If no route matches, return 404S
 http_response_code(404);
