@@ -25,7 +25,7 @@ try {
 $data = json_decode(file_get_contents("php://input"), true);
 
 // Check if the required keys are present in the request
-$requiredKeys = ['first_name', 'last_name', 'email', 'password', 'confirm_password', 'date_of_birth', 'role'];
+$requiredKeys = ['first_name', 'last_name', 'email', 'password', 'confirm_password', 'date_of_birth'];
 
 foreach ($requiredKeys as $key) {
     if (!isset($data[$key])) {
@@ -45,8 +45,7 @@ $validation = $validator->make($data, [
     'email'                   => 'required|email|max:100',
     'password'                => 'required|min:8|regex:/[A-Za-z]/|regex:/[0-9]/|regex:/[@$!%*?&]/', 
     'confirm_password'        => 'required|min:8',
-    'date_of_birth'           => 'required|date|before:today', 
-    'role'                    => 'required|in:customer,admin,vendor'
+    'date_of_birth'           => 'required|date|before:today'
 ]);
 
 try {
@@ -90,7 +89,7 @@ try {
 
     // Attempt to register the user
     $user = new Register($db);
-    $result = $user->registerUser($data['first_name'], $data['last_name'], $data['email'], $data['password'], $data['date_of_birth'], $data['role']);
+    $result = $user->registerUser($data['first_name'], $data['last_name'], $data['email'], $data['password'], $data['date_of_birth']);
 
     if ($result['success']) {
         $tokenId = $result['token_id'];

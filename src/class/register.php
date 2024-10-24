@@ -6,15 +6,15 @@ class Register {
         $this->db = $db;
     }
 
-    public function registerUser($firstName, $lastName, $email, $password, $dateOfBirth, $role) {
+    public function registerUser($firstName, $lastName, $email, $password, $dateOfBirth) {
         try {
             // Generate a unique user ID and token
             $userId = bin2hex(random_bytes(16)); // Unique user ID
             $tokenId = bin2hex(random_bytes(16)); // Verification token
 
-            // Insert user into the users table
+            // Insert user into the users table 
             $query = 'INSERT INTO users (user_id, first_name, last_name, email, password, reg_date, date_of_birth, role, is_verified) 
-                      VALUES (:user_id, :first_name, :last_name, :email, :password, CURDATE(), :date_of_birth, :role, 0)';
+                      VALUES (:user_id, :first_name, :last_name, :email, :password, CURDATE(), :date_of_birth, "customer", 0)';
             $stmt = $this->db->prepare($query);
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             
@@ -25,7 +25,6 @@ class Register {
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':password', $hashedPassword);
             $stmt->bindParam(':date_of_birth', $dateOfBirth);
-            $stmt->bindParam(':role', $role);
             
             if ($stmt->execute()) {
                 // Insert token into user_tokens table
@@ -48,7 +47,7 @@ class Register {
                 return ['success' => false, 'message' => 'User registration failed.'];
             }
         } catch (PDOException $e) {
-            return ['success' => false, 'message' => 'Database error: ' . $e->getMessage()];
+            return ['success' => false, 'message' => 'Database error: ' . $e->getMessage()];   
         }
     }
 }
