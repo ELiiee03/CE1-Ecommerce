@@ -45,7 +45,7 @@ $validation = $validator->make($data, [
     'email'                   => 'required|email|max:100',
     'password'                => 'required|min:8|regex:/[A-Za-z]/|regex:/[0-9]/|regex:/[@$!%*?&]/', 
     'confirm_password'        => 'required|min:8',
-    'date_of_birth'           => 'required|date|before:today'
+    'date_of_birth'           => 'required|regex:/^\d{4}-\d{2}-\d{2}$/'
 ]);
 
 try {

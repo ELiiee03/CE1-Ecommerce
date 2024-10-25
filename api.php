@@ -77,7 +77,7 @@ if ($request_uri === $base_path . '/profile/photo/upload' && $request_method ===
 }
 
 // Add Address
-if ($request_uri === $base_path . '/add/address' && $request_method === 'POST') {
+if ($request_uri === $base_path . '/address' && $request_method === 'POST') {
     require __DIR__ . '/controllers/addAddress.php'; 
     exit();
 }
@@ -100,8 +100,6 @@ if (preg_match("#^" . $base_path . "/roles/([a-zA-Z0-9]+)$#", $request_uri, $mat
     require __DIR__ . '/controllers/getUserRoles.php'; 
     exit();
 }
-
-
 
 // If no route matches, return 404S
 http_response_code(404);
