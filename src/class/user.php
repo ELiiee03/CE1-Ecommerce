@@ -107,11 +107,30 @@ class User
             return ['status' => 'error', 'message' => 'File upload error'];
         }
 
+        // Ensure the user exists and is verified
+        $stmt = $this->db->prepare('SELECT is_verified FROM users WHERE user_id = :user_id');
+        $stmt->execute(['user_id' => $userId]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$user) {
+                return ['status' => 'error', 'message' => 'User not found'];
+            }
+
+            if ($user['is_verified'] == 0) {
+                return ['status' => 'error', 'message' => 'User is not verified. Cannot upload profile picture'];
+            }
+
         // Validate file type
         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
         $fileType = mime_content_type($file['tmp_name']);
         if (!in_array($fileType, $allowedTypes)) {
             return ['status' => 'error', 'message' => 'Invalid file type. Allowed types: jpeg, png, gif'];
+        }
+
+         // Validate file size 
+        $maxFileSize = 2 * 1024 * 1024; // 2MB in bytes
+        if ($file['size'] > $maxFileSize) {
+            return ['status' => 'error', 'message' => 'File size exceeds the 2MB limit'];
         }
 
         // Set the upload directory and generate a unique filename
