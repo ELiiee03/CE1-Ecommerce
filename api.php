@@ -60,7 +60,7 @@ if ($request_uri === $base_path . '/user/profile' && $request_method === 'GET') 
 
 // Assign Role to User Route
 if ($request_uri === $base_path . '/role/assign' && $request_method === 'POST') {
-    require __DIR__ . '/controllers/userRole.php';
+    require __DIR__ . '/controllers/assignRole.php';
     exit();
 }
 
@@ -94,12 +94,19 @@ if ($request_uri === $base_path . '/delete/address' && $request_method === 'DELE
     exit();
 }
 
-// List User Roles
+// List Specific User Roles
 if (preg_match("#^" . $base_path . "/roles/([a-zA-Z0-9]+)$#", $request_uri, $matches) && $request_method === 'GET') {
     $user_id = $matches[1]; // Extract the user ID from the URL
     require __DIR__ . '/controllers/getUserRoles.php'; 
     exit();
 }
+
+// List All User
+if ($request_uri === $base_path . "/all/users" && $request_method === 'GET') {
+    require __DIR__ . '/controllers/listAllUsers.php';
+    exit();
+}
+
 
 // If no route matches, return 404S
 http_response_code(404);

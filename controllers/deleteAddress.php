@@ -2,68 +2,91 @@
 
 require_once __DIR__ . '/../vendor/autoload.php'; 
 require_once __DIR__ . '/../src/database/database.php'; 
-require_once __DIR__ . '/../src/class/address.php'; 
+require_once __DIR__ . '/../src/class/address.php';
 
 use Dotenv\Dotenv;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use Rakit\Validation\Validator;
 
 header('Content-Type: application/json');
 
-$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
-$dotenv->load();
+    $dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+    $dotenv->load();
+        // Establish a connection to the database
+        try {
+            $database = new Database();
+            $db = $database->connect();
+            $address = new Address($db);
+        } catch (Exception $e) {
+            http_response_code(500);
+            echo json_encode(['message' => 'Database connection failed: ' . $e->getMessage()]);
+            exit;
+        }
 
-try {
-    // Establish a connection to the database
-    $database = new Database();
-    $db = $database->connect();
-    $address = new Address($db);  // Instantiate the Address class
-} catch (Exception $e) {
-    http_response_code(500);  // Internal Server Error
-    echo json_encode(['message' => 'Database connection failed: ' . $e->getMessage()]);
-    exit;
-}
+    // Retrieve JWT from Authorization header
+    $headers = apache_request_headers();
+        if (!isset($headers['Authorization'])) {
+            http_response_code(401);
+            echo json_encode(['message' => 'Authorization token not found']);
+            exit;
+        }
 
-// Get the input data
-$input = file_get_contents("php://input");
-$data = json_decode($input, true);
+    $jwt = str_replace('Bearer ', '', $headers['Authorization']);
 
-// Debugging statement
-file_put_contents('php://stderr', print_r($data, true));
+        // Decode the JWT
+        try {
+            $decoded = JWT::decode($jwt, new Key($_ENV['JWT_SECRET'], 'HS256'));
+            $userIdFromToken = $decoded->data->id;
+        } catch (Exception $e) {
+            http_response_code(401);
+            echo json_encode(['message' => 'Invalid token: ' . $e->getMessage()]);
+            exit;
+        }
 
-// Validate input data
-if (empty($data['address_id']) || empty($data['user_id'])) {
-    http_response_code(400);  // Bad Request
-    echo json_encode(['message' => 'Incomplete data: address_id and user_id are required']);
-    exit;
-}
+    // Get input data
+    $input = file_get_contents("php://input");
+    $data = json_decode($input, true);
 
-// Verify user ID and role
-$user = $address->verifyUserIdAndRole($data['user_id']);
-if (!$user) {
-    http_response_code(404);  // Not Found
-    echo json_encode(['message' => 'User ID not found']);
-    exit;
-} elseif ($user['role'] === NULL) {
-    http_response_code(403);  // Forbidden
-    echo json_encode(['message' => 'User does not have a valid role to delete an address']);
-    exit;
-}
+    $validator = new Validator();
 
-// Verify user ID and address ID association
-if (!$address->verifyUserAddress($data['user_id'], $data['address_id'])) {
-    http_response_code(403);  // Forbidden
-    echo json_encode(['message' => 'User ID does not have permission to delete this address']);
-    exit;
-}
+    $validation = $validator->make($data, [
+            'address_id' => 'required',
+            'user_id'    => 'required'
+    ]);
 
-// Delete the address
-if ($address->deleteAddress($data['address_id'])) {
-    http_response_code(200);  // OK
-    echo json_encode(['message' => 'Address deleted successfully']);
-} else {
-    http_response_code(500);  // Internal Server Error
-    echo json_encode(['message' => 'Failed to delete address']);
-}
+    $validation->validate();
 
-// Disable error display for production
-ini_set('display_errors', '0');
-error_reporting(0);
+            if ($validation->fails()) {
+                http_response_code(400);
+                echo json_encode(['message' => 'Validation errors', 'errors' => $validation->errors()->firstOfAll()]);
+                exit;
+            }
+
+            // Check if the user_id in the data matches the token user_id and if the user is verified
+            if ($userIdFromToken !== $data['user_id'] || !$address->isUserVerified($userIdFromToken)) {
+                http_response_code(403);
+                echo json_encode(['message' => 'Unauthorized access: User ID mismatch or user not verified']);
+                exit;
+            }
+
+            // Verify user and address association
+            if (!$address->verifyUserAddress($data['user_id'], $data['address_id'])) {
+                http_response_code(403);
+                echo json_encode(['message' => 'User ID does not have permission to delete this address']);
+                exit;
+            }
+
+            // Delete the address
+            if ($address->deleteAddress($data['address_id'])) {
+                http_response_code(200);
+                echo json_encode(['message' => 'Address deleted successfully']);
+            } else {
+                http_response_code(500);
+                echo json_encode(['message' => 'Failed to delete address']);
+            }
+
+            // Disable error display for production
+            ini_set('display_errors', '0');
+            error_reporting(0);
+?>

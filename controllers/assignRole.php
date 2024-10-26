@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../src/database/database.php';
-require_once __DIR__ . '/../src/class/user_role.php'; 
+require_once __DIR__ . '/../src/class/user.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -16,9 +16,10 @@ header("Content-Type: application/json");
     $jwt_secret_key = $_ENV['JWT_SECRET'];
 
         try {
-            // Establish a connection to the database
+
             $database = new Database();
             $db = $database->connect();
+
         } catch (Exception $e) {
             http_response_code(500);  // Internal Server Error
             echo json_encode(['message' => 'Database connection failed: ' . $e->getMessage()]);
@@ -37,42 +38,43 @@ header("Content-Type: application/json");
     $token = str_replace('Bearer ', '', $authHeader);
 
         try {
-            // Decode JWT to get admin user ID
+            // Decode JWT to get user ID
             $decoded = JWT::decode($token, new Key($jwt_secret_key, 'HS256'));
             $admin_user_id = $decoded->data->id;
 
-            // Only allow admins to fetch user roles
-            $userRolesObj = new UserRoles($db);
-            $admin_profile = $userRolesObj->getUserProfile($admin_user_id);
-            
-            if ($admin_profile['role'] !== 'admin') {
+            // Only allow admins to assign roles
+            $user = new User($db);
+            $admin_profile = $user->getProfile($admin_user_id);
+
+            if (empty($admin_profile) || $admin_profile['role'] !== 'admin') {
                 http_response_code(403); // Forbidden
-                echo json_encode(['message' => 'Access denied. Only admins can view roles.']);
+                echo json_encode(['message' => 'Access denied. Only admins can assign roles.']);
                 exit();
             }
 
-            // Validate the user_id that was passed from api.php
-            if (!isset($user_id)) {
+            // Get the input data
+            $data = json_decode(file_get_contents("php://input"), true);
+            $user_id = $data['user_id'] ?? null;
+            $role = $data['role'] ?? null;
+
+            if (!$user_id || !$role) {
                 http_response_code(400); // Bad Request
-                echo json_encode(['message' => 'User ID is required']);
+                echo json_encode(['message' => 'User ID and role are required']);
                 exit();
             }
 
-            // Fetch the role of the user by user_id
-            $userRole = $userRolesObj->getUserRole($user_id); 
+            // Assign the role to the user
+            $result = $user->assignRole($user_id, $role);
 
-            if ($userRole) {
+            if ($result['status'] === 'success') {
                 http_response_code(200); // OK
-                echo json_encode([
-                    'user_id' => $user_id,
-                    'role' => $userRole 
-                ]);
+                echo json_encode(['message' => $result['message']]);
             } else {
-                http_response_code(404); // Not Found
-                echo json_encode(['message' => 'User role not found']);
+                http_response_code(500); // Internal Server Error
+                echo json_encode(['message' => $result['message']]);
             }
 
-        } catch (Exception $e) {
-            http_response_code(401); // Unauthorized
-            echo json_encode(['message' => 'Access denied', 'error' => $e->getMessage()]);
-        }
+            } catch (Exception $e) {
+                http_response_code(401); // Unauthorized
+                echo json_encode(['message' => 'Access denied', 'error' => $e->getMessage()]);
+            }

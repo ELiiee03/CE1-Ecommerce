@@ -27,7 +27,7 @@ class Login {
             if ($user) {
                 // Check if email is verified
                 if ($user['is_verified'] == 0) {
-                    return ['success' => false, 'message' => 'Email not verified.'];
+                    return ['success' => false, 'message' => 'User not verified, please check your email first'];
                 }
     
                 // Verify password
@@ -57,8 +57,8 @@ class Login {
                         'success' => true,
                         'message' => 'Login successful',
                         'token' => $jwt,
-                        'user_id' => $user['user_id'], // Include user_id
-                        'name' => trim($user['first_name'] . ' ' . $user['last_name']), // Full name
+                        'user_id' => $user['user_id'],
+                        'name' => trim($user['first_name'] . ' ' . $user['last_name']),
                     ];
                 } else {
                     return ['success' => false, 'message' => 'Invalid credentials'];

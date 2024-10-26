@@ -71,8 +71,8 @@ class Address {
 
     // --To update and delete address, it needs to verify user id and check first if the user has a role--
 
-    // Function to verify user ID and role
-    public function verifyUserIdAndRole($user_id) {
+   // Verify user ID and role
+   public function verifyUserIdAndRole($user_id) {
         $query = "SELECT role, is_verified FROM users WHERE user_id = :user_id";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $user_id);
@@ -81,13 +81,13 @@ class Address {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Function to check if the user is verified
-    private function isUserVerified($user_id) {
+    // Change this method to public to allow external access
+    public function isUserVerified($user_id) {
         $user = $this->verifyUserIdAndRole($user_id);
         return $user && $user['is_verified'] == 1; // Assuming 1 means verified
     }
 
-    // Function to verify user ID and address ID association
+    // Verify user ID and address ID association
     public function verifyUserAddress($user_id, $address_id) {
         $query = "SELECT * FROM user_address WHERE user_id = :user_id AND address_id = :address_id";
         $stmt = $this->conn->prepare($query);
@@ -98,21 +98,22 @@ class Address {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // -- FOR UPDATE ADDRESS
-
+    // Update Address
     public function updateAddress($address) {
         $query = "UPDATE address 
-                  SET unit_number = :unit_number, street_address = :street_address, 
-                      city = :city, region = :region, postal_code = :postal_code
-                  WHERE address_id = :address_id";
+                SET unit_number = :unit_number, street_address = :street_address, 
+                    city = :city, region = :region, postal_code = :postal_code
+                WHERE address_id = :address_id";
 
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':unit_number', $address->unit_number);
-        $stmt->bindParam(':street_address', $address->street_address);
-        $stmt->bindParam(':city', $address->city);
-        $stmt->bindParam(':region', $address->region);
-        $stmt->bindParam(':postal_code', $address->postal_code);
-        $stmt->bindParam(':address_id', $address->address_id);
+        
+        // Bind parameters from array $address
+        $stmt->bindParam(':unit_number', $address['unit_number']);
+        $stmt->bindParam(':street_address', $address['street_address']);
+        $stmt->bindParam(':city', $address['city']);
+        $stmt->bindParam(':region', $address['region']);
+        $stmt->bindParam(':postal_code', $address['postal_code']);
+        $stmt->bindParam(':address_id', $address['address_id']);
 
         return $stmt->execute();
     }
@@ -121,13 +122,11 @@ class Address {
     // -- FOR DELETE ADDRESS
 
     public function deleteAddress($address_id) {
-        // First, remove the association from the user_address table
         $userAddressQuery = "DELETE FROM user_address WHERE address_id = :address_id";
         $userAddressStmt = $this->conn->prepare($userAddressQuery);
         $userAddressStmt->bindParam(':address_id', $address_id);
         $userAddressStmt->execute();
 
-        // Then, delete the address from the address table
         $addressQuery = "DELETE FROM address WHERE address_id = :address_id";
         $addressStmt = $this->conn->prepare($addressQuery);
         $addressStmt->bindParam(':address_id', $address_id);
