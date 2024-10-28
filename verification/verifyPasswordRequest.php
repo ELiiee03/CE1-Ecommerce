@@ -1,7 +1,8 @@
 <?php
-require_once __DIR__ . '/src/database/database.php';
-require_once __DIR__ . '/src/password/verifyRequest.php';
-require_once __DIR__ . '/vendor/autoload.php';
+
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../src/database/database.php';
+require_once __DIR__ . '/../src/password/verifyRequest.php';
 
 header('Content-Type: application/json');
 
@@ -24,10 +25,11 @@ $stmt->execute(['token' => $token]);
 if ($stmt->rowCount() === 1) {
     // Token is valid
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    $userId = $user['user_id']; 
-    
+    $userId = $user['user_id'];
+
+    // Include the token in the success message
     http_response_code(200);
-    echo json_encode(['message' => 'Token is valid. You can now reset your password.']);
+    echo json_encode(['message' => 'Token is valid. You can now reset your password. Token: ' . $token]);
 } else {
     // Token is invalid or expired
     http_response_code(400);
