@@ -1,7 +1,7 @@
 <?php
 
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 $request_method = $_SERVER['REQUEST_METHOD'];
@@ -9,7 +9,6 @@ $request_uri = $_SERVER['REQUEST_URI'];
 
 // Base path for the API routes
 $base_path = '/user-auth/CE1-Ecommerce/api.php';
-
 
 // Register Route
 if ($request_uri === $base_path . '/register' && $request_method === 'POST') {
@@ -101,13 +100,32 @@ if (preg_match("#^" . $base_path . "/roles/([a-zA-Z0-9]+)$#", $request_uri, $mat
     exit();
 }
 
-// List All User
+// List All Users
 if ($request_uri === $base_path . "/all/users" && $request_method === 'GET') {
     require __DIR__ . '/controllers/listAllUsers.php';
     exit();
 }
 
+// Shopping Cart Routes
 
-// If no route matches, return 404S
+// Add Item to Cart
+if ($request_uri === $base_path . '/cart/add' && $request_method === 'POST') {
+    require __DIR__ . '/controllers/addItemToCart.php'; 
+    exit();
+}
+
+// Update Item Quantity
+if ($request_uri === $base_path . '/cart/update' && $request_method === 'PUT') {
+    require __DIR__ . '/controllers/updateItemQuantity.php'; 
+    exit();
+}
+
+// Checkout
+if ($request_uri === $base_path . '/cart/checkout' && $request_method === 'POST') {
+    require __DIR__ . '/controllers/checkout.php'; 
+    exit();
+}
+
+// If no route matches, return 404
 http_response_code(404);
 echo json_encode(['message' => 'Endpoint not found']);
