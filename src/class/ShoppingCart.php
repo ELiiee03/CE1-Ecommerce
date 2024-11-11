@@ -1,7 +1,7 @@
 <?php
 class ShoppingCart {
     private $conn;
-    // private $table_name = "shopping_cart";
+    private $table_name = "shopping_cart";
     private $items_table = "shopping_cart_item";
 
     public $cart_id;

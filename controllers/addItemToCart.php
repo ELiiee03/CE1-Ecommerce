@@ -1,8 +1,21 @@
 <?php
-require_once '../src/class/ShoppingCart.php';
+session_start();
+require_once __DIR__ . '/../src/class/ShoppingCart.php';
+require_once __DIR__ . '/../src/database/database.php';
+
+// Ensure session is started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Set a default cart_id if not already set
+if (!isset($_SESSION['cart_id'])) {
+    $_SESSION['cart_id'] = uniqid(); // or use a UUID generator
+}
 
 $db = new Database(); // Assuming you have a Database class for DB connection
-$cart = new ShoppingCart($db);
+$pdo = $db->connect(); // Get the PDO instance
+$cart = new ShoppingCart($pdo); // Pass the PDO instance to the ShoppingCart class
 $cart->cart_id = $_SESSION['cart_id']; // Assuming you store cart_id in session
 
 // Get the input data
@@ -24,4 +37,4 @@ if ($cart->addItem($product_id, $quantity)) {
     http_response_code(500);
     echo json_encode(['message' => 'Failed to add item']);
 }
-?> 
+?>
