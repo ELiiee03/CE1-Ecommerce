@@ -5,9 +5,9 @@ require_once __DIR__ . '/../src/database/database.php';
 require_once __DIR__ . '/../src/class/user.php';
 
 
+use Dotenv\Dotenv;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Dotenv\Dotenv;
 
 header("Content-Type: application/json");
 
@@ -58,4 +58,3 @@ header("Content-Type: application/json");
             echo json_encode(['message' => 'Access denied', 'error' => $e->getMessage()]);
         }
 
-?>

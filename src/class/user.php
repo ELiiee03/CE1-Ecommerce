@@ -170,7 +170,7 @@ class User{
 
         public function getAllUsers() {
             $query = "SELECT user_id, first_name, last_name, email, role FROM users";
-            $stmt = $this->conn->prepare($query);
+            $stmt = $this->db->prepare($query);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }

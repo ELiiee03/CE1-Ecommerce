@@ -3,7 +3,7 @@ class Database {
     private $host = "127.0.0.1"; 
     private $username = "root"; 
     private $password = "";     
-    private $db_name = "user-auth";  
+    private $db_name = "it113";  
     public $conn;
 
     public function connect() {

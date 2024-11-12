@@ -8,18 +8,27 @@ $request_method = $_SERVER['REQUEST_METHOD'];
 $request_uri = $_SERVER['REQUEST_URI'];
 
 // Base path for the API routes
-$base_path = '/user-auth/CE1-Ecommerce/api.php';
+$base_path = '/CE1-Ecommerce/api.php';
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
+if ($request_uri === $base_path . "/products" && $request_method === 'GET') {
+    require __DIR__ . '/controllers/listAllProducts.php';
+    exit();
+}
 
 // Register Route
 if ($request_uri === $base_path . '/register' && $request_method === 'POST') {
-    require __DIR__ . '/controllers/registerUser.php'; 
+    require __DIR__ . '/controllers/registerUser.php';
     exit();
 }
 
 // Login Route
 if ($request_uri === $base_path . '/login' && $request_method === 'POST') {
-    require __DIR__ . '/controllers/loginUser.php'; 
+    require __DIR__ . '/controllers/loginUser.php';
     exit();
 }
 
@@ -78,26 +87,26 @@ if ($request_uri === $base_path . '/profile/photo/upload' && $request_method ===
 
 // Add Address
 if ($request_uri === $base_path . '/address' && $request_method === 'POST') {
-    require __DIR__ . '/controllers/addAddress.php'; 
+    require __DIR__ . '/controllers/addAddress.php';
     exit();
 }
 
 // Update Address
 if ($request_uri === $base_path . '/update/address' && $request_method === 'POST') {
-    require __DIR__ . '/controllers/updateAddress.php'; 
+    require __DIR__ . '/controllers/updateAddress.php';
     exit();
 }
 
 // Delete Address
 if ($request_uri === $base_path . '/delete/address' && $request_method === 'DELETE') {
-    require __DIR__ . '/controllers/deleteAddress.php'; 
+    require __DIR__ . '/controllers/deleteAddress.php';
     exit();
 }
 
 // List Specific User Roles
 if (preg_match("#^" . $base_path . "/roles/([a-zA-Z0-9]+)$#", $request_uri, $matches) && $request_method === 'GET') {
     $user_id = $matches[1]; // Extract the user ID from the URL
-    require __DIR__ . '/controllers/getUserRoles.php'; 
+    require __DIR__ . '/controllers/getUserRoles.php';
     exit();
 }
 
