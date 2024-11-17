@@ -15,12 +15,18 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 
-if ($request_uri === $base_path . "/products" && $request_method === 'GET') {
+if ($request_uri === $base_path . '/products/search' && $request_method === 'POST') {
+    require __DIR__ . '/controllers/searchController.php';
+    exit();
+}
+
+if (preg_match("#^" . $base_path . "/products/([0-9]+)$#", $request_uri, $matches) && $request_method === 'GET') {
+    $page = (int) $matches[1];
     require __DIR__ . '/controllers/listAllProducts.php';
     exit();
 }
 
-// Register Route
+// Register Route   
 if ($request_uri === $base_path . '/register' && $request_method === 'POST') {
     require __DIR__ . '/controllers/registerUser.php';
     exit();
