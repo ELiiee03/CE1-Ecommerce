@@ -25,7 +25,7 @@ class Register {
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':password', $hashedPassword);
             $stmt->bindParam(':date_of_birth', $dateOfBirth);
-            $stmt->bindParam(':role', $role); 
+            $stmt->bindParam(':role', $role);
             
             if ($stmt->execute()) {
                 // Insert token into user_tokens table

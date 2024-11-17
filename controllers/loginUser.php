@@ -1,6 +1,7 @@
 <?php
 require_once 'src/database/database.php';
 require_once 'src/class/login.php';
+require_once 'src/class/User.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Dotenv\Dotenv;
