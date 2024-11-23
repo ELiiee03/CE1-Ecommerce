@@ -15,16 +15,40 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 
-if ($request_uri === $base_path . '/products/search' && $request_method === 'POST') {
+if ($request_uri === $base_path . '/products/add' && $request_method === 'POST') {
+    require __DIR__ . '/controllers/addProduct.php';
+    exit();
+}
+
+
+if ($request_uri === $base_path . '/products/delete' && $request_method === 'DELETE') {
+    require __DIR__ . '/controllers/deleteProduct.php';
+    exit();
+}
+
+
+if ($request_uri === $base_path . '/products/update' && $request_method === 'PUT') {
+    require __DIR__ . '/controllers/updateProduct.php';
+    exit();
+}
+
+
+if (preg_match("#^" . $base_path . "/products/([0-9]+)$#", $request_uri, $matches) && $request_method === 'GET') {
+    $product_id = (int)$matches[1];
+    require __DIR__ . '/controllers/getProductDetails.php';
+    exit();
+}
+
+if ($request_uri === $base_path . '/products/search' && $request_method === 'GET') {
     require __DIR__ . '/controllers/searchController.php';
     exit();
 }
 
-if (preg_match("#^" . $base_path . "/products/([0-9]+)$#", $request_uri, $matches) && $request_method === 'GET') {
+/* if (preg_match("#^" . $base_path . "/products/([0-9]+)$#", $request_uri, $matches) && $request_method === 'GET') {
     $page = (int) $matches[1];
     require __DIR__ . '/controllers/listAllProducts.php';
     exit();
-}
+} */
 
 // Register Route   
 if ($request_uri === $base_path . '/register' && $request_method === 'POST') {
