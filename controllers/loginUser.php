@@ -50,6 +50,9 @@ header('Content-Type: application/json');
     $result = $login->loginUser();
 
         if ($result['success']) {
+            // Set user_id in session
+            $_SESSION['user_id'] = $result['user_id'];
+            
             // Return response with JWT token and user info
             http_response_code(200);
             echo json_encode([

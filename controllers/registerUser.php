@@ -64,6 +64,9 @@ $result = $register->registerUser(
 );
 
 if ($result['success']) {
+    // Set user_id in session
+    $_SESSION['user_id'] = $result['user_id'];
+    http_response_code(201);
     echo json_encode(['message' => 'User registered successfully', 'user_id' => $result['user_id'], 'token_id' => $result['token_id']]);
 } else {
     http_response_code(500);
