@@ -112,7 +112,13 @@ if ($path === $base_path . "/all/users" && $request_method === 'GET') {
     exit();
 }
 
-// Shopping Cart Routes
+// -----------------Products Routes ---------------------//
+if ($request_uri === $base_path . '/products/add' && $request_method === 'POST') {
+    require __DIR__ . '/controllers/addProduct.php';
+    exit();
+}
+
+// ------------------Shopping Cart Routes ---------------------//
 
 // Add Item to Cart
 if ($path === $base_path . '/cart/add' && $request_method === 'POST') {
