@@ -1,15 +1,15 @@
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/../src/database/database.php';
-require_once __DIR__ . '/../src/class/product.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../../src/database/database.php';
+require_once __DIR__ . '/../../src/class/product.php';
 
 use Dotenv\Dotenv;
 
 header("Content-Type: application/json");
 
 // Load environment variables
-$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
 $dotenv->load();
 
 try {

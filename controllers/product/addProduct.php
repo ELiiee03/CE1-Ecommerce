@@ -1,9 +1,9 @@
 <?php
 
-require_once __DIR__ ."/../src/class/user_role.php";
-require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/../src/database/database.php';
-require_once __DIR__ . '/../src/class/product.php';
+require_once __DIR__ . "/../../src/class/user_role.php";
+require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/../../src/database/database.php';
+require_once __DIR__ . '/../../src/class/product.php';
 
 use Dotenv\Dotenv;
 use Firebase\JWT\JWT;
@@ -11,7 +11,7 @@ use Firebase\JWT\Key;
 
 header("Content-Type: application/json");
 
-$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
 $dotenv->load();
 
 $jwt_secret_key = $_ENV['JWT_SECRET'];
