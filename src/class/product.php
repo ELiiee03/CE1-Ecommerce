@@ -9,6 +9,14 @@ class Product
         $this->db = $db;
     }
 
+    public function userProducts($userId) {
+        $query = "SELECT * FROM products WHERE user_id = :userId";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function addProduct($product)
     {
         $query = "INSERT INTO products (product_name, description, size, color, price, category_id, image_url, user_id)

@@ -112,6 +112,12 @@ if ($path === $base_path . "/all/users" && $request_method === 'GET') {
 
 // -----------------Products Routes ---------------------//
 
+// Users Product
+if ($path === $base_path . '/profile/products' && $request_method === 'GET') {
+    require __DIR__ . '/controllers/product/getUserProducts.php';
+    exit();
+}
+
 // Add Product
 if ($path === $base_path . '/product/add' && $request_method === 'POST') {
     require __DIR__ . '/controllers/product/addProduct.php';

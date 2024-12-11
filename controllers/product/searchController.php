@@ -29,7 +29,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 $keyword = $data['keyword'] ?? null;
 $page = isset($data['page']) ? (int) $data['page'] : 1;
 $category = $data['category'] ?? null;
-$sort = $data['sort'] ?? 'ASC'; // Default sorting to ascending
+$sort = $data['sort'] ?? 'ASC'; 
 
 try {
     // Call the search function with pagination, optional category filter, and sorting
