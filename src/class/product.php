@@ -103,7 +103,7 @@ class Product
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function getAllProducts($page = 1)
+/*     public function getAllProducts($page = 1)
     {
         $limit = 5;
         $offset = ($page - 1) * $limit;
@@ -115,7 +115,7 @@ class Product
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    } */
 
     public function searchProducts($keyword, $page = 1, $perPage = 5, $categoryName = null, $sort = null)
     {
